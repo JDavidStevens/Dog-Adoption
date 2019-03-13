@@ -1,22 +1,31 @@
 import React from "react";
-import {render} from 'react-dom';
-import Results from './Results';
+import { render } from "react-dom";
+import { Router, Link } from "@reach/router";
+import Results from "./Results";
+import Details from "./Details";
 
-class App extends React.Component{
-  render(){
-    return(
+class App extends React.Component {
+  render() {
+    return (
       <div>
-        <h1>Adopt Me!</h1>
-        <Results/>
+        <header>
+          <Link to="/">Adopt Me!</Link>
+        </header>
+        <Router>
+          <Results path="/" />
+          <Details path="/details/:id" />
+        </Router>
       </div>
-    )
+    );
   }
 }
 render(<App />, document.getElementById("root"));
 
 //npm run dev runs project in browser on http://localhost:1234
-{/* 
+{
+  /* 
           dump state into DOM:
           <pre>
           <code>{JSON.stringify(this.state, null, 4)}</code>
-          </pre> */}
+          </pre> */
+}
