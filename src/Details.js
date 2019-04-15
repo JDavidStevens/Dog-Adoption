@@ -1,20 +1,28 @@
 import React from "react";
 import pf from "petfinder-client";
+// import Loadable from "react-loadable";
 import { navigate } from "@reach/router/lib/history";
 import Carousel from "./Carousel";
-import Modal from './Modal';
+import Modal from "./Modal";
 
 const petfinder = pf({
   key: process.env.REACT_APP_API_KEY,
   secret: process.env.REACT_APP_API_SECRET
 });
 
+// const loading = () => <h1>loading content ...</h1>;
+
+// const LoadableContent = Loadable({
+//   loader: () => import("./AdoptModalContent"),
+//   loading
+// });
+
 class Details extends React.Component {
   state = {
     loading: true,
-    showModal: false    
+    showModal: false
   };
-  toggleModal=()=>this.setState({showModal: !this.state.showModal})
+  toggleModal = () => this.setState({ showModal: !this.state.showModal });
   componentDidMount() {
     petfinder.pet
       .get({ output: "full", id: this.props.id })
@@ -44,10 +52,18 @@ class Details extends React.Component {
     if (this.state.loading) {
       return <h1>loading ...</h1>;
     }
-    const { name, animal, breed, description, location,media,showModal } = this.state;
+    const {
+      name,
+      animal,
+      breed,
+      description,
+      location,
+      media,
+      showModal
+    } = this.state;
     return (
       <div className="details">
-      <Carousel media={media}/>
+        <Carousel media={media} />
         <div>
           <h1>{name}</h1>
           <h2>
@@ -55,16 +71,11 @@ class Details extends React.Component {
           </h2>
           <button onClick={this.toggleModal}>Adopt {name}</button>
           <p>{description}</p>
-          {
-            showModal? (
-              <Modal>
-                <h1>Would you like to adopt {name}</h1>
-                <div className="buttons">
-                <button onClick={this.toggleModal}>Yes</button>
-                <button onClick={this.toggleModal}>No</button>
-                </div>
-              </Modal>
-            ): null}
+          {showModal ? (
+            <Modal>
+              <LoadableContent toggleModal={this.toggleModal} name={name} />
+            </Modal>
+          ) : null}
         </div>
       </div>
     );
